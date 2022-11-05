@@ -8,6 +8,9 @@ public class Configuration : ScriptableObject
     [Header("Gizmos")]
     [SerializeField]
     private float _gizmos_range = 1f;
+    [SerializeField]
+    private float _gizmos_length = 1f;
+
 
     [Header("Camera")]
     [SerializeField]
@@ -31,6 +34,7 @@ public class Configuration : ScriptableObject
 
 
     public float c_gizmos_range => _gizmos_range;
+    public float c_gizmos_length => _gizmos_length;
     public float c_max_vertical_angle => _max_vertical_angle;
     public float c_min_vertical_angle => _min_vertical_angle;
     public float c_max_horizontal_angle => _max_horizontal_angle;

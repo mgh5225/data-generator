@@ -22,7 +22,7 @@ public class Agent : MonoBehaviour
     {
         if (_pos.Length > 0)
         {
-            transform.SetPositionAndRotation(_pos[next].transform.position, Quaternion.identity);
+            transform.SetPositionAndRotation(_pos[next].transform.position, _pos[next].transform.rotation);
 
             next += 1;
             next %= _pos.Length;

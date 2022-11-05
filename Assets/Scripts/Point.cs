@@ -16,6 +16,10 @@ public class Point : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _config.c_gizmos_range);
+
+        var to = transform.position + transform.forward * _config.c_gizmos_length;
+
+        Gizmos.DrawLine(transform.position, to);
     }
 
 }

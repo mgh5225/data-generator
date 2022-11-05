@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Configuration
   m_EditorClassIdentifier: 
   _gizmos_range: 0.25
+  _gizmos_length: 1
   _min_vertical_angle: 0
-  _max_vertical_angle: 30
-  _min_horizontal_angle: -45
-  _max_horizontal_angle: 45
-  _photos_num: 5
+  _max_vertical_angle: 0
+  _min_horizontal_angle: 0
+  _max_horizontal_angle: 0
+  _photos_num: 1
