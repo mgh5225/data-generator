@@ -7,6 +7,11 @@ public class Point : MonoBehaviour
     [SerializeField]
     private Configuration _config;
 
+    [SerializeField]
+    private string _name;
+
+    public string p_name => _name;
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

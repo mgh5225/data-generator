@@ -14,6 +14,6 @@ public class Screenshot : MonoBehaviour
         renderedTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         RenderTexture.active = null;
         byte[] byteArray = renderedTexture.EncodeToPNG();
-        System.IO.File.WriteAllBytes(Application.dataPath + filename, byteArray);
+        System.IO.File.WriteAllBytes(Application.dataPath + "/Dataset/" + filename, byteArray);
     }
 }

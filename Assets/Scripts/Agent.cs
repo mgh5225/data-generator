@@ -6,17 +6,19 @@ public class Agent : MonoBehaviour
 {
     [SerializeField]
     private Configuration _config;
-    private GameObject[] _pos;
+    [SerializeField]
+    private GameObject _points;
+    private Point[] _pos;
     private int next = 0;
 
     public Configuration a_config => _config;
 
     void Awake()
     {
-        _pos = GameObject.FindGameObjectsWithTag("Point");
+        _pos = _points.GetComponentsInChildren<Point>();
     }
 
-    public bool NextPosition()
+    public (Point, bool) NextPosition()
     {
         if (_pos.Length > 0)
         {
@@ -25,9 +27,9 @@ public class Agent : MonoBehaviour
             next += 1;
             next %= _pos.Length;
 
-            return next == 0;
+            return (_pos[next], next == 0);
         }
-        return true;
+        return (null, true);
     }
 
     public void ChangeView()
