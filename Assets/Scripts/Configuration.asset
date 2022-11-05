@@ -17,3 +17,4 @@ MonoBehaviour:
   _max_vertical_angle: 30
   _min_horizontal_angle: -45
   _max_horizontal_angle: 45
+  _photos_num: 5

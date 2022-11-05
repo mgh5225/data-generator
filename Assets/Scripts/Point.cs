@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Point : MonoBehaviour
 {
+    [SerializeField]
     private Configuration _config;
 
     private void OnDrawGizmos()

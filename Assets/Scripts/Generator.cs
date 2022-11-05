@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-public class Generator : ConfigManager
+public class Generator : MonoBehaviour
 {
     private Agent _agent;
     private Screenshot _screenshot;
@@ -18,7 +18,11 @@ public class Generator : ConfigManager
     {
         while (_agent.NextPosition())
         {
-            _screenshot.SaveCameraView(_camera, String.Format("{0}.png", Time.fixedTime));
+            for (var i = 0; i < _agent.a_config.c_photos_num; i++)
+            {
+                _agent.ChangeView();
+                _screenshot.SaveCameraView(_camera, String.Format("{0}.png", Time.fixedTime));
+            }
         }
     }
 }
