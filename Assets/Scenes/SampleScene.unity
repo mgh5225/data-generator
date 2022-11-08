@@ -463,7 +463,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: 42b2625938b1d3f2da0b1a087f604511, type: 2}
   _name: Blue
-  _lights: []
+  _lights:
+  - {fileID: 2065193774}
 --- !u!1 &422941382
 GameObject:
   m_ObjectHideFlags: 0
@@ -1769,12 +1770,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2065193773}
   m_LocalRotation: {x: 0.19099289, y: -0, z: -0, w: 0.98159146}
-  m_LocalPosition: {x: -3.7594748, y: 5.93, z: -14.86}
+  m_LocalPosition: {x: -3.7594748, y: 5.93, z: -4.8599997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 2073318695}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 22.021, y: 0, z: 0}
 --- !u!1 &2073318694
 GameObject:
@@ -1810,6 +1811,7 @@ Transform:
   - {fileID: 285996803}
   - {fileID: 422941383}
   - {fileID: 875381627}
+  - {fileID: 2065193775}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

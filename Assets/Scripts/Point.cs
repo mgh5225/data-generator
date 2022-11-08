@@ -10,7 +10,11 @@ public class Point : MonoBehaviour
     [SerializeField]
     private string _name;
 
+    [SerializeField]
+    private Light[] _lights;
+
     public string p_name => _name;
+    public Light[] p_lights => _lights;
 
     private void OnDrawGizmos()
     {
