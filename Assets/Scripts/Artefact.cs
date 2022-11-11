@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 
 public class Artefact : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class Artefact : MonoBehaviour
     private Configuration _config;
 
     [SerializeField]
+    [ContextMenuItem("GameObject/Create Artefact", "Create")]
     private GameObject _prefab;
     private GameObject _object;
     private void OnDrawGizmos()
@@ -26,5 +28,12 @@ public class Artefact : MonoBehaviour
     public void RemoveArtefact()
     {
         Object.Destroy(_object);
+    }
+
+    [MenuItem("GameObject/Pre Defined Object/Artefact", false, 0)]
+    public static void Create()
+    {
+        var _object = new GameObject("Artefact");
+        var _component = _object.AddComponent<Artefact>();
     }
 }

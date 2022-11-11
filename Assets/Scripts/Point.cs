@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class Point : MonoBehaviour
@@ -25,6 +26,13 @@ public class Point : MonoBehaviour
         var to = transform.position + transform.forward * _config.c_gizmos_length;
 
         Gizmos.DrawLine(transform.position, to);
+    }
+
+    [MenuItem("GameObject/Pre Defined Object/Point", false, 0)]
+    public static void Create()
+    {
+        var _object = new GameObject("Point");
+        var _component = _object.AddComponent<Point>();
     }
 
 }
