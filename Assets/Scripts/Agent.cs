@@ -9,7 +9,7 @@ public class Agent : MonoBehaviour
     [SerializeField]
     private GameObject _points;
     private Point[] _pos;
-    private int next = 0;
+    private int _next = 0;
 
     public Configuration a_config => _config;
 
@@ -22,12 +22,14 @@ public class Agent : MonoBehaviour
     {
         if (_pos.Length > 0)
         {
-            transform.SetPositionAndRotation(_pos[next].transform.position, _pos[next].transform.rotation);
+            var _point = _pos[_next];
 
-            next += 1;
-            next %= _pos.Length;
+            transform.SetPositionAndRotation(_point.transform.position, _point.transform.rotation);
 
-            return (_pos[next], next == 0);
+            _next += 1;
+            _next %= _pos.Length;
+
+            return (_point, _next == 0);
         }
         return (null, true);
     }

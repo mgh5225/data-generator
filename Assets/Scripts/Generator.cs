@@ -23,7 +23,7 @@ public class Generator : MonoBehaviour
         _photos_num = 0;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (_done)
             UnityEditor.EditorApplication.isPlaying = false;
@@ -34,7 +34,21 @@ public class Generator : MonoBehaviour
             _photos_num = 0;
         }
         _agent.ChangeView();
-        _screenshot.SaveCameraView(_camera, String.Format("{0}{1}.png", _point.p_name, _photos_num));
+        _screenshot.SaveCameraView(_camera, String.Format("{0}{1}_default.png", _point.p_name, _photos_num));
+
+        foreach (var _light in _point.p_lights)
+        {
+            _light.enabled = !_light.enabled;
+        }
+
+        if (_point.p_lights.Length > 0)
+            _screenshot.SaveCameraView(_camera, String.Format("{0}{1}_light.png", _point.p_name, _photos_num));
+
+        foreach (var _light in _point.p_lights)
+        {
+            _light.enabled = !_light.enabled;
+        }
+
         _photos_num++;
     }
 }
