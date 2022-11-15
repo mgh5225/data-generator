@@ -77,12 +77,7 @@ public class Agent : MonoBehaviour
             changeCameraView();
             ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_default.png", _point.p_name, _photos_num));
 
-            foreach (var _light in _point.p_lights)
-            {
-                _light.enabled = !_light.enabled;
-            }
-
-            if (_point.p_lights.Length > 0)
+            if (_point.ToggleLights())
                 ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_light.png", _point.p_name, _photos_num));
 
         }
@@ -98,10 +93,7 @@ public class Agent : MonoBehaviour
 
         if (_artefact_flag)
         {
-            foreach (var _light in _point.p_lights)
-            {
-                _light.enabled = !_light.enabled;
-            }
+            _point.ToggleLights();
             _photos_num++;
         }
 

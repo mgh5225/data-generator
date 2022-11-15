@@ -17,7 +17,6 @@ public class Point : MonoBehaviour
     private int _next_a = 0;
 
     public string p_name => _name;
-    public Light[] p_lights => _lights;
 
     private void OnDrawGizmos()
     {
@@ -42,6 +41,16 @@ public class Point : MonoBehaviour
             return (_artefact, _next_a == 0);
         }
         return (null, true);
+    }
+
+    public bool ToggleLights()
+    {
+        foreach (var _light in _lights)
+        {
+            _light.enabled = !_light.enabled;
+        }
+
+        return _lights.Length > 0;
     }
 
 
