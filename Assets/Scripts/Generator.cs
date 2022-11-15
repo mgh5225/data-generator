@@ -5,16 +5,12 @@ using UnityEngine;
 public class Generator : MonoBehaviour
 {
     private Agent _agent;
-    private Screenshot _screenshot;
-    private Camera _camera;
     private int _photos_num = 0;
     private Point _point = null;
     private bool _done = false;
     void Awake()
     {
         _agent = GetComponent<Agent>();
-        _screenshot = GetComponent<Screenshot>();
-        _camera = GetComponent<Camera>();
     }
 
     void Start()
@@ -23,8 +19,11 @@ public class Generator : MonoBehaviour
         _photos_num = 0;
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        var _width = _agent.a_config.c_width;
+        var _height = _agent.a_config.c_height;
+
         if (_done)
             UnityEditor.EditorApplication.isPlaying = false;
 
@@ -34,7 +33,7 @@ public class Generator : MonoBehaviour
             _photos_num = 0;
         }
         _agent.ChangeView();
-        _screenshot.SaveCameraView(_camera, String.Format("{0}{1}_default.png", _point.p_name, _photos_num));
+        ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_default.png", _point.p_name, _photos_num));
 
         foreach (var _light in _point.p_lights)
         {
@@ -42,7 +41,7 @@ public class Generator : MonoBehaviour
         }
 
         if (_point.p_lights.Length > 0)
-            _screenshot.SaveCameraView(_camera, String.Format("{0}{1}_light.png", _point.p_name, _photos_num));
+            ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_light.png", _point.p_name, _photos_num));
 
         foreach (var _light in _point.p_lights)
         {

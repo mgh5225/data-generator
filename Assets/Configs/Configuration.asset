@@ -19,3 +19,5 @@ MonoBehaviour:
   _min_horizontal_angle: 0
   _max_horizontal_angle: 0
   _photos_num: 1
+  _width: 500
+  _height: 500
