@@ -14,6 +14,7 @@ public class Point : MonoBehaviour
 
     [SerializeField]
     private Artefact[] _artefacts;
+    private int _next_a = 0;
 
     public string p_name => _name;
     public Light[] p_lights => _lights;
@@ -27,6 +28,22 @@ public class Point : MonoBehaviour
 
         Gizmos.DrawLine(transform.position, to);
     }
+
+    public (Artefact, bool) GetArtifact()
+    {
+        if (_artefacts.Length > 0)
+        {
+            var _artefact = _artefacts[_next_a];
+
+
+            _next_a += 1;
+            _next_a %= _artefacts.Length;
+
+            return (_artefact, _next_a == 0);
+        }
+        return (null, true);
+    }
+
 
     [MenuItem("GameObject/Pre Defined Object/Point", false, 0)]
     public static void Create()

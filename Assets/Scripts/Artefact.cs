@@ -7,9 +7,14 @@ public class Artefact : MonoBehaviour
     private Configuration _config;
 
     [SerializeField]
-    [ContextMenuItem("GameObject/Create Artefact", "Create")]
+    private string _name;
+
+    [SerializeField]
     private GameObject _prefab;
     private GameObject _object;
+
+    public string a_name => _name;
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
