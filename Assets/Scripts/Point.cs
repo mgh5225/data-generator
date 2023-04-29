@@ -9,12 +9,21 @@ public class Point : MonoBehaviour
     [SerializeField]
     private string _name;
 
+    [Header("Lights")]
     [SerializeField]
     private Light[] _lights;
 
+    [Header("Artefacts")]
     [SerializeField]
     private Artefact[] _artefacts;
     private int _next_a = 0;
+
+    [Header("Lightmaps")]
+    [SerializeField]
+    private Lightmaps _lightmaps_1;
+    [SerializeField]
+    private Lightmaps _lightmaps_2;
+
 
     public string p_name => _name;
 
@@ -51,6 +60,16 @@ public class Point : MonoBehaviour
         }
 
         return _lights.Length > 0;
+    }
+
+    public void ToggleLightmaps()
+    {
+        if (!_lightmaps_1.isActive)
+            _lightmaps_1.ChangeLightMap();
+        else if (!_lightmaps_2.isActive)
+            _lightmaps_2.ChangeLightMap();
+        else
+            _config.c_main_lightmaps.ChangeLightMap();
     }
 
 

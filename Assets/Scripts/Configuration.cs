@@ -35,6 +35,10 @@ public class Configuration : ScriptableObject
     [SerializeField]
     private int _height = 300;
 
+    [Header("Main Lightmaps")]
+    [SerializeField]
+    private Lightmaps _main_lightmaps;
+
     public float c_gizmos_range => _gizmos_range;
     public float c_gizmos_length => _gizmos_length;
     public float c_max_vertical_angle => _max_vertical_angle;
@@ -44,6 +48,7 @@ public class Configuration : ScriptableObject
     public float c_photos_num => _photos_num;
     public int c_width => _width;
     public int c_height => _height;
+    public Lightmaps c_main_lightmaps => _main_lightmaps;
 
     private void OnValidate()
     {

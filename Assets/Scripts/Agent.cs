@@ -75,10 +75,11 @@ public class Agent : MonoBehaviour
         if (!_artefact)
         {
             changeCameraView();
+            _point.ToggleLightmaps();
             ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_default.png", _point.p_name, _photos_num));
 
-            if (_point.ToggleLights())
-                ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_light.png", _point.p_name, _photos_num));
+            _point.ToggleLightmaps();
+            ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_light.png", _point.p_name, _photos_num));
 
         }
 
@@ -93,7 +94,7 @@ public class Agent : MonoBehaviour
 
         if (_artefact_flag)
         {
-            _point.ToggleLights();
+            _point.ToggleLightmaps();
             _photos_num++;
         }
 
