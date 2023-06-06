@@ -17,12 +17,24 @@ public class Artefact : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _config.c_gizmos_range);
 
-        var to = transform.position + transform.forward * _config.c_gizmos_length;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(transform.position, _config.c_gizmos_range);
 
-        Gizmos.DrawLine(transform.position, to);
+
+        Gizmos.color = Color.blue;
+        var to_f = transform.position + transform.forward * _config.c_gizmos_length;
+        Gizmos.DrawLine(transform.position, to_f);
+
+        Gizmos.color = Color.red;
+        var to_r = transform.position + transform.right * _config.c_gizmos_length;
+        Gizmos.DrawLine(transform.position, to_r);
+
+        Gizmos.color = Color.green;
+        var to_u = transform.position + transform.up * _config.c_gizmos_length;
+        Gizmos.DrawLine(transform.position, to_u);
     }
 
     public void CreateArtefact()

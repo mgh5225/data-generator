@@ -14,6 +14,9 @@ public class Lightmaps
 
     public void ChangeLightMap()
     {
+        if (_lightmaps.Length == 0)
+            return;
+
         LightmapSettings.lightmaps = _convertTexturesToLightmapData(_lightmaps);
         LightmapSettings.lightProbes = _lightProbes;
         isActive = true;

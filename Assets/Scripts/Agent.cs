@@ -7,6 +7,10 @@ public class Agent : MonoBehaviour
     private Configuration _config;
     [SerializeField]
     private GameObject _points;
+    [SerializeField]
+    private MeshCollider[] _surfaces;
+    [SerializeField]
+    private GameObject[] _artefacts;
     private Point[] _pos;
     private int _next = 0;
     private int _photos_num = 0;

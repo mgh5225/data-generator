@@ -39,6 +39,10 @@ public class Configuration : ScriptableObject
     [SerializeField]
     private Lightmaps _main_lightmaps;
 
+    [Header("Points")]
+    [SerializeField]
+    private bool _generate_random_points = false;
+
     public float c_gizmos_range => _gizmos_range;
     public float c_gizmos_length => _gizmos_length;
     public float c_max_vertical_angle => _max_vertical_angle;
@@ -49,6 +53,7 @@ public class Configuration : ScriptableObject
     public int c_width => _width;
     public int c_height => _height;
     public Lightmaps c_main_lightmaps => _main_lightmaps;
+    public bool c_generate_random_points => _generate_random_points;
 
     private void OnValidate()
     {

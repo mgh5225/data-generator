@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f686dd9966e380730b9c73958265db77, type: 3}
   m_Name: Configuration
   m_EditorClassIdentifier: 
-  _gizmos_range: 0.25
-  _gizmos_length: 1
+  _gizmos_range: 0.05
+  _gizmos_length: 0.15
   _min_vertical_angle: 0
   _max_vertical_angle: 0
   _min_horizontal_angle: 0
   _max_horizontal_angle: 0
   _photos_num: 1
-  _width: 500
-  _height: 500
+  _width: 1024
+  _height: 1024
+  _main_lightmaps:
+    _lightmaps: []
+    _lightProbes: {fileID: 0}
+    isActive: 1
+  _generate_random_points: 1
