@@ -15,6 +15,16 @@ public class Artefact : MonoBehaviour
 
     public string a_name => _name;
 
+    public static (GameObject, Artefact) CreateArtefact(Configuration config, GameObject prefab, string name)
+    {
+        var (obj, artefact) = Artefact.Create();
+        artefact._config = config;
+        artefact._name = name;
+        artefact._prefab = prefab;
+
+        return (obj, artefact);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -48,9 +58,11 @@ public class Artefact : MonoBehaviour
     }
 
     [MenuItem("GameObject/Pre Defined Object/Artefact", false, 0)]
-    public static void Create()
+    public static (GameObject, Artefact) Create()
     {
         var _object = new GameObject("Artefact");
         var _component = _object.AddComponent<Artefact>();
+
+        return (_object, _component);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class Agent : MonoBehaviour
     private MeshCollider[] _surfaces;
     [SerializeField]
     private GameObject[] _artefacts;
-    private Point[] _pos;
+    private List<Point> _pos;
     private int _next = 0;
     private int _photos_num = 0;
     private Point _point = null;
@@ -21,26 +22,77 @@ public class Agent : MonoBehaviour
 
     void Awake()
     {
-        _pos = _points.GetComponentsInChildren<Point>();
+        _pos = new List<Point>();
+        if (!_config.c_generate_random_points)
+            _pos.AddRange(_points.GetComponentsInChildren<Point>());
     }
 
     void Start()
     {
+        if (_config.c_generate_random_points)
+            generatePoints();
+
         (_point, _point_flag) = nextPosition();
         _photos_num = 0;
+
+    }
+
+    void FixedUpdate()
+    {
+        generateData();
+    }
+
+
+    private void generatePoints()
+    {
+
+        foreach (var surface in _surfaces)
+        {
+            for (int i = 0; i < _config.c_artefacts_per_surface; i++)
+            {
+                var artefact_idx = UnityEngine.Random.Range(0, _artefacts.Length);
+                var prefab = _artefacts[artefact_idx];
+
+                var (artefact_obj, artefact) = Artefact.CreateArtefact(_config, prefab, prefab.name);
+
+                var meshProperties = RandomPointOnMesh.CalcMeshProperties_Static(surface.sharedMesh);
+                var (position, normalVec) = RandomPointOnMesh.GetRandomPointOnMesh_Static(surface, meshProperties);
+
+                if (position == null)
+                    continue;
+
+                artefact_obj.transform.position = (Vector3)position;
+
+                artefact_obj.transform.rotation = Quaternion.FromToRotation(artefact_obj.transform.up, (Vector3)normalVec);
+
+                var target = artefact_obj.transform.position;
+
+                var (obj, point) = Point.CreatePoint(_config, target.ToString());
+
+                obj.transform.position = target + _config.c_offset;
+                obj.transform.LookAt(target);
+
+                point.addArtefact(artefact);
+
+                _pos.Add(point);
+            }
+
+
+        }
+
     }
 
 
     private (Point, bool) nextPosition()
     {
-        if (_pos.Length > 0)
+        if (_pos.Count > 0)
         {
             var _point = _pos[_next];
 
             transform.SetPositionAndRotation(_point.transform.position, _point.transform.rotation);
 
             _next += 1;
-            _next %= _pos.Length;
+            _next %= _pos.Count;
 
             return (_point, _next == 0);
         }
@@ -56,7 +108,7 @@ public class Agent : MonoBehaviour
         transform.Rotate(vec, Space.Self);
     }
 
-    void FixedUpdate()
+    private void generateData()
     {
         if (_point == null)
         {
@@ -79,11 +131,24 @@ public class Agent : MonoBehaviour
         if (!_artefact)
         {
             changeCameraView();
-            _point.ToggleLightmaps();
-            ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_default.png", _point.p_name, _photos_num));
 
-            _point.ToggleLightmaps();
-            ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_light.png", _point.p_name, _photos_num));
+            if (_config.c_use_lightmaps)
+                _point.ToggleLightmaps();
+            if (_config.c_use_lights)
+                _point.ToggleLights();
+
+            ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}_{1}_default.png", _point.p_name, _photos_num));
+
+            if (_config.c_use_lightmaps || _config.c_use_lights)
+            {
+                if (_config.c_use_lightmaps)
+                    _point.ToggleLightmaps();
+                if (_config.c_use_lights)
+                    _point.ToggleLights();
+
+                ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}_{1}_light.png", _point.p_name, _photos_num));
+            }
+
 
         }
 
@@ -92,13 +157,17 @@ public class Agent : MonoBehaviour
         if (_artefact)
         {
             _artefact.CreateArtefact();
-            ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}{1}_{2}.png", _point.p_name, _photos_num, _artefact.a_name));
+            ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}_{1}_{2}.png", _point.p_name, _photos_num, _artefact.a_name));
             _artefact.RemoveArtefact();
         }
 
         if (_artefact_flag)
         {
-            _point.ToggleLightmaps();
+            if (_config.c_use_lightmaps)
+                _point.ToggleLightmaps();
+            if (_config.c_use_lights)
+                _point.ToggleLights();
+
             _photos_num++;
         }
 

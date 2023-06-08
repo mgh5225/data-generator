@@ -18,7 +18,7 @@ public class RandomPointOnMesh : MonoBehaviour
         _instance = this;
     }
 
-    public MeshProperties CalcMeshProperties(Mesh mesh)
+    private MeshProperties CalcMeshProperties(Mesh mesh)
     {
         var sizes = GetTriSizes(mesh.triangles, mesh.vertices);
         var cumulativeSizes = new float[sizes.Length];
@@ -38,7 +38,7 @@ public class RandomPointOnMesh : MonoBehaviour
         };
     }
 
-    public Vector3? GetRandomPointOnMesh(MeshCollider meshCollider, MeshProperties meshProperties)
+    private (Vector3?, Vector3?) GetRandomPointOnMesh(MeshCollider meshCollider, MeshProperties meshProperties)
     {
         var mesh = meshCollider.sharedMesh;
 
@@ -61,7 +61,7 @@ public class RandomPointOnMesh : MonoBehaviour
         if (triIndex == -1)
         {
             Debug.LogError("triIndex should never be -1");
-            return null;
+            return (null, null);
         }
 
         Vector3 a = mesh.vertices[mesh.triangles[triIndex * 3]];
@@ -81,13 +81,16 @@ public class RandomPointOnMesh : MonoBehaviour
         // Turn point back to a Vector3
         Vector3 pointOnMesh = a + r * (b - a) + s * (c - a);
 
+        var normalVec = Vector3.Cross(b - a, c - a);
+        normalVec /= normalVec.magnitude;
+
         pointOnMesh = meshCollider.transform.rotation * pointOnMesh;
         pointOnMesh += meshCollider.transform.position;
 
-        return pointOnMesh;
+        return (pointOnMesh, normalVec);
     }
 
-    public float[] GetTriSizes(int[] triangles, Vector3[] vertices)
+    private float[] GetTriSizes(int[] triangles, Vector3[] vertices)
     {
         int triCount = triangles.Length / 3;
         float[] sizes = new float[triCount];
@@ -99,5 +102,15 @@ public class RandomPointOnMesh : MonoBehaviour
             ).magnitude;
         }
         return sizes;
+    }
+
+    public static MeshProperties CalcMeshProperties_Static(Mesh mesh)
+    {
+        return _instance.CalcMeshProperties(mesh);
+    }
+
+    public static (Vector3?, Vector3?) GetRandomPointOnMesh_Static(MeshCollider meshCollider, MeshProperties meshProperties)
+    {
+        return _instance.GetRandomPointOnMesh(meshCollider, meshProperties);
     }
 }

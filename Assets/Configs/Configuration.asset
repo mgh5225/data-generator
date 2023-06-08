@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gizmos_range: 0.05
   _gizmos_length: 0.15
-  _min_vertical_angle: 0
-  _max_vertical_angle: 0
-  _min_horizontal_angle: 0
-  _max_horizontal_angle: 0
+  _min_vertical_angle: -15
+  _max_vertical_angle: 15
+  _min_horizontal_angle: -15
+  _max_horizontal_angle: 15
+  _offset: {x: 0, y: 0.75, z: 0.75}
   _photos_num: 1
   _width: 1024
   _height: 1024
@@ -26,3 +27,6 @@ MonoBehaviour:
     _lightProbes: {fileID: 0}
     isActive: 1
   _generate_random_points: 1
+  _use_lights: 0
+  _use_lightmaps: 0
+  _artefacts_per_surface: 20

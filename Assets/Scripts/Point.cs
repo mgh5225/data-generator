@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ public class Point : MonoBehaviour
 
     [Header("Artefacts")]
     [SerializeField]
-    private Artefact[] _artefacts;
+    private List<Artefact> _artefacts;
     private int _next_a = 0;
 
     [Header("Lightmaps")]
@@ -26,6 +27,21 @@ public class Point : MonoBehaviour
 
 
     public string p_name => _name;
+
+    public static (GameObject, Point) CreatePoint(Configuration config, string name)
+    {
+        var (obj, point) = Point.Create();
+        point._config = config;
+        point._name = name;
+        point._artefacts = new List<Artefact>();
+
+        return (obj, point);
+    }
+
+    public void addArtefact(Artefact artefact)
+    {
+        _artefacts.Add(artefact);
+    }
 
     private void OnDrawGizmos()
     {
@@ -39,13 +55,13 @@ public class Point : MonoBehaviour
 
     public (Artefact, bool) GetArtifact()
     {
-        if (_artefacts.Length > 0)
+        if (_artefacts.Count > 0)
         {
             var _artefact = _artefacts[_next_a];
 
 
             _next_a += 1;
-            _next_a %= _artefacts.Length;
+            _next_a %= _artefacts.Count;
 
             return (_artefact, _next_a == 0);
         }
@@ -74,10 +90,11 @@ public class Point : MonoBehaviour
 
 
     [MenuItem("GameObject/Pre Defined Object/Point", false, 0)]
-    public static void Create()
+    public static (GameObject, Point) Create()
     {
         var _object = new GameObject("Point");
         var _component = _object.AddComponent<Point>();
+        return (_object, _component);
     }
 
 }
