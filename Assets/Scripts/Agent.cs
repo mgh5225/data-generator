@@ -39,7 +39,7 @@ public class Agent : MonoBehaviour
 
     void FixedUpdate()
     {
-        // generateData();
+        generateData();
     }
 
 
