@@ -30,3 +30,4 @@ MonoBehaviour:
   _use_lights: 0
   _use_lightmaps: 0
   _artefacts_per_surface: 20
+  _artefact_max_angle: 5
