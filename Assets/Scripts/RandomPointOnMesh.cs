@@ -5,6 +5,7 @@ public class MeshProperties
 {
     public float[] sizes { get; set; }
     public float[] cumulativeSizes { get; set; }
+    public bool[] flags { get; set; }
     public float total { get; set; }
 }
 
@@ -18,23 +19,26 @@ public class RandomPointOnMesh : MonoBehaviour
         _instance = this;
     }
 
-    private MeshProperties CalcMeshProperties(Mesh mesh)
+    private MeshProperties CalcMeshProperties(Mesh mesh, float epsilon = 0)
     {
-        var sizes = GetTriSizes(mesh.triangles, mesh.vertices);
+        var sizes = GetTriSizes(mesh.triangles, mesh.vertices, epsilon);
         var cumulativeSizes = new float[sizes.Length];
+        var flags = new bool[sizes.Length];
         float total = 0;
 
         for (int i = 0; i < sizes.Length; i++)
         {
             total += sizes[i];
             cumulativeSizes[i] = total;
+            flags[i] = sizes[i] > 0;
         }
 
         return new MeshProperties
         {
             sizes = sizes,
             cumulativeSizes = cumulativeSizes,
-            total = total
+            total = total,
+            flags = flags
         };
     }
 
@@ -45,12 +49,16 @@ public class RandomPointOnMesh : MonoBehaviour
         var sizes = meshProperties.sizes;
         var cumulativeSizes = meshProperties.cumulativeSizes;
         var total = meshProperties.total;
+        var flags = meshProperties.flags;
 
         float randomSample = Random.value * total;
         int triIndex = -1;
 
         for (int i = 0; i < sizes.Length; i++)
         {
+            if (!flags[i])
+                continue;
+
             if (randomSample <= cumulativeSizes[i])
             {
                 triIndex = i;
@@ -59,10 +67,7 @@ public class RandomPointOnMesh : MonoBehaviour
         }
 
         if (triIndex == -1)
-        {
-            Debug.LogError("triIndex should never be -1");
             return (null, null);
-        }
 
         Vector3 a = mesh.vertices[mesh.triangles[triIndex * 3]];
         Vector3 b = mesh.vertices[mesh.triangles[triIndex * 3 + 1]];
@@ -90,23 +95,32 @@ public class RandomPointOnMesh : MonoBehaviour
         return (pointOnMesh, normalVec);
     }
 
-    private float[] GetTriSizes(int[] triangles, Vector3[] vertices)
+    private float[] GetTriSizes(int[] triangles, Vector3[] vertices, float epsilon)
     {
         int triCount = triangles.Length / 3;
         float[] sizes = new float[triCount];
         for (int i = 0; i < triCount; i++)
         {
-            sizes[i] = .5f * Vector3.Cross(
-                vertices[triangles[i * 3 + 1]] - vertices[triangles[i * 3]],
-                vertices[triangles[i * 3 + 2]] - vertices[triangles[i * 3]]
-            ).magnitude;
+
+            Vector3 a = vertices[triangles[i * 3]];
+            Vector3 b = vertices[triangles[i * 3 + 1]];
+            Vector3 c = vertices[triangles[i * 3 + 2]];
+
+            var normalVec = Vector3.Cross(b - a, c - a);
+            var angle = Vector3.Angle(normalVec, Vector3.up);
+
+            if (angle <= epsilon)
+                sizes[i] = .5f * normalVec.magnitude;
+            else
+                sizes[i] = 0;
+
         }
         return sizes;
     }
 
-    public static MeshProperties CalcMeshProperties_Static(Mesh mesh)
+    public static MeshProperties CalcMeshProperties_Static(Mesh mesh, float epsilon = 0)
     {
-        return _instance.CalcMeshProperties(mesh);
+        return _instance.CalcMeshProperties(mesh, epsilon);
     }
 
     public static (Vector3?, Vector3?) GetRandomPointOnMesh_Static(MeshCollider meshCollider, MeshProperties meshProperties)

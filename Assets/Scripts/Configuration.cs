@@ -51,6 +51,9 @@ public class Configuration : ScriptableObject
     private bool _use_lightmaps = false;
     [SerializeField]
     private int _artefacts_per_surface = 0;
+    [SerializeField]
+    [Range(0, 180)]
+    private float _artefact_max_angle = 0;
 
     public float c_gizmos_range => _gizmos_range;
     public float c_gizmos_length => _gizmos_length;
@@ -67,6 +70,7 @@ public class Configuration : ScriptableObject
     public bool c_use_lights => _use_lights;
     public bool c_use_lightmaps => _use_lightmaps;
     public int c_artefacts_per_surface => _artefacts_per_surface;
+    public float c_artefact_max_angle => _artefact_max_angle;
 
     private void OnValidate()
     {

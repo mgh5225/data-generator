@@ -39,7 +39,7 @@ public class Agent : MonoBehaviour
 
     void FixedUpdate()
     {
-        generateData();
+        // generateData();
     }
 
 
@@ -48,6 +48,8 @@ public class Agent : MonoBehaviour
 
         foreach (var surface in _surfaces)
         {
+            var meshProperties = RandomPointOnMesh.CalcMeshProperties_Static(surface.sharedMesh, _config.c_artefact_max_angle);
+
             for (int i = 0; i < _config.c_artefacts_per_surface; i++)
             {
                 var artefact_idx = UnityEngine.Random.Range(0, _artefacts.Length);
@@ -55,11 +57,13 @@ public class Agent : MonoBehaviour
 
                 var (artefact_obj, artefact) = Artefact.CreateArtefact(_config, prefab, prefab.name);
 
-                var meshProperties = RandomPointOnMesh.CalcMeshProperties_Static(surface.sharedMesh);
                 var (position, normalVec) = RandomPointOnMesh.GetRandomPointOnMesh_Static(surface, meshProperties);
 
                 if (position == null)
+                {
+                    GameObject.Destroy(artefact_obj);
                     continue;
+                }
 
                 artefact_obj.transform.position = (Vector3)position;
 
