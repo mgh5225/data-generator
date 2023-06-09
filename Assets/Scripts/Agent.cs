@@ -69,6 +69,12 @@ public class Agent : MonoBehaviour
 
                 artefact_obj.transform.rotation = Quaternion.FromToRotation(artefact_obj.transform.up, (Vector3)normalVec);
 
+                var random_rotate = UnityEngine.Random.rotation.eulerAngles;
+                random_rotate.x = 0;
+                random_rotate.z = 0;
+
+                artefact_obj.transform.Rotate(random_rotate, Space.Self);
+
                 var target = artefact_obj.transform.position;
 
                 var (obj, point) = Point.CreatePoint(_config, target.ToString());
