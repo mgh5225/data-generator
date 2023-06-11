@@ -47,9 +47,11 @@ public class Artefact : MonoBehaviour
         Gizmos.DrawLine(transform.position, to_u);
     }
 
-    public void CreateArtefact()
+    public GameObject CreateArtefact()
     {
         _object = Object.Instantiate(_prefab, transform.position, transform.rotation);
+        _object.tag = "Artefact";
+        return _object;
     }
 
     public void RemoveArtefact()

@@ -19,6 +19,7 @@ public class Agent : MonoBehaviour
     private Artefact _artefact = null;
     private bool _point_flag = false;
     private bool _artefact_flag = false;
+    private Transform _obstacle;
 
     void Awake()
     {
@@ -48,6 +49,8 @@ public class Agent : MonoBehaviour
 
         foreach (var surface in _surfaces)
         {
+            surface.tag = "Surface";
+
             var meshProperties = RandomPointOnMesh.CalcMeshProperties_Static(surface.sharedMesh, _config.c_artefact_max_angle);
 
             for (int i = 0; i < _config.c_artefacts_per_surface; i++)
@@ -166,9 +169,14 @@ public class Agent : MonoBehaviour
 
         if (_artefact)
         {
-            _artefact.CreateArtefact();
+            var _artefact_obj = _artefact.CreateArtefact();
+
+            removeObstacle(_artefact_obj.transform);
+
             ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}_{1}_{2}.png", _point.p_name, _photos_num, _artefact.a_name));
             _artefact.RemoveArtefact();
+
+            fixObstacle();
         }
 
         if (_artefact_flag)
@@ -183,5 +191,32 @@ public class Agent : MonoBehaviour
 
         if (_point_flag && _artefact_flag)
             UnityEditor.EditorApplication.isPlaying = false;
+    }
+
+    private void removeObstacle(Transform target)
+    {
+        fixObstacle();
+
+        RaycastHit hit;
+        var distance = Vector3.Distance(transform.position, target.position);
+        if (Physics.Raycast(transform.position, target.position - transform.position, out hit, distance))
+        {
+            if (!_config.c_white_tags.Contains(hit.transform.tag))
+            {
+                _obstacle = hit.transform;
+                _obstacle.gameObject.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+            }
+        }
+
+
+    }
+
+    private void fixObstacle()
+    {
+        if (_obstacle)
+        {
+            _obstacle.gameObject.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+            _obstacle = null;
+        }
     }
 }

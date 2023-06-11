@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Configuration", menuName = "Create New Configuration")]
@@ -24,6 +25,8 @@ public class Configuration : ScriptableObject
     [SerializeField]
     [Range(-90, 90)]
     private float _max_horizontal_angle = 0f;
+    [SerializeField]
+    private List<string> _white_tags;
 
     [SerializeField]
     private Vector3 _offset;
@@ -61,6 +64,7 @@ public class Configuration : ScriptableObject
     public float c_min_vertical_angle => _min_vertical_angle;
     public float c_max_horizontal_angle => _max_horizontal_angle;
     public float c_min_horizontal_angle => _min_horizontal_angle;
+    public List<string> c_white_tags => _white_tags;
     public Vector3 c_offset => _offset;
     public float c_photos_num => _photos_num;
     public int c_width => _width;
