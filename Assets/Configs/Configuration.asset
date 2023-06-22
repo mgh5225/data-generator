@@ -21,7 +21,7 @@ MonoBehaviour:
   _white_tags:
   - Artefact
   - Surface
-  _offset: {x: 0, y: 0.25, z: 0.25}
+  _offset: {x: 0, y: 0.5, z: 0.75}
   _photos_num: 1
   _width: 1024
   _height: 1024

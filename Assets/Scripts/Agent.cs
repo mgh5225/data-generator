@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using System.Data;
 using UnityEngine;
 
 public class Agent : MonoBehaviour
@@ -20,6 +21,7 @@ public class Agent : MonoBehaviour
     private bool _point_flag = false;
     private bool _artefact_flag = false;
     private Transform _obstacle;
+    private DataTable dataset;
 
     void Awake()
     {
@@ -36,14 +38,20 @@ public class Agent : MonoBehaviour
         (_point, _point_flag) = nextPosition();
         _photos_num = 0;
 
+        dataset = new DataTable(DateTime.Now.ToString("MM-dd-yy H:mm:ss"));
+        dataset.Columns.Add("photo");
+        dataset.Columns.Add("position_x");
+        dataset.Columns.Add("position_y");
+        dataset.Columns.Add("position_z");
+        dataset.Columns.Add("rotation_x");
+        dataset.Columns.Add("rotation_y");
+        dataset.Columns.Add("rotation_z");
     }
 
     void FixedUpdate()
     {
         generateData();
     }
-
-
     private void generatePoints()
     {
 
@@ -80,7 +88,9 @@ public class Agent : MonoBehaviour
 
                 var target = artefact_obj.transform.position;
 
-                var (obj, point) = Point.CreatePoint(_config, target.ToString());
+                var point_name = target.x + "_" + target.y + "_" + target.z;
+
+                var (obj, point) = Point.CreatePoint(_config, point_name);
 
                 obj.transform.position = target + _config.c_offset;
                 obj.transform.LookAt(target);
@@ -94,8 +104,6 @@ public class Agent : MonoBehaviour
         }
 
     }
-
-
     private (Point, bool) nextPosition()
     {
         if (_pos.Count > 0)
@@ -111,7 +119,6 @@ public class Agent : MonoBehaviour
         }
         return (null, true);
     }
-
     private void changeCameraView()
     {
         var vec = new Vector3();
@@ -120,11 +127,11 @@ public class Agent : MonoBehaviour
 
         transform.Rotate(vec, Space.Self);
     }
-
     private void generateData()
     {
         if (_point == null)
         {
+            Extensions.ToCSVFile(dataset, Application.dataPath + "/Dataset/" + dataset.TableName + ".csv");
             UnityEditor.EditorApplication.isPlaying = false;
             return;
         }
@@ -152,6 +159,16 @@ public class Agent : MonoBehaviour
 
             ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}_{1}_default.png", _point.p_name, _photos_num));
 
+            dataset.Rows.Add(
+                String.Format("{0}_{1}_default.png", _point.p_name, _photos_num),
+                _point.transform.position.x,
+                _point.transform.position.y,
+                _point.transform.position.z,
+                _point.transform.rotation.x,
+                _point.transform.rotation.y,
+                _point.transform.rotation.z
+            );
+
             if (_config.c_use_lightmaps || _config.c_use_lights)
             {
                 if (_config.c_use_lightmaps)
@@ -160,6 +177,16 @@ public class Agent : MonoBehaviour
                     _point.ToggleLights();
 
                 ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}_{1}_light.png", _point.p_name, _photos_num));
+
+                dataset.Rows.Add(
+                    String.Format("{0}_{1}_light.png", _point.p_name, _photos_num),
+                    _point.transform.position.x,
+                    _point.transform.position.y,
+                    _point.transform.position.z,
+                    _point.transform.rotation.x,
+                    _point.transform.rotation.y,
+                    _point.transform.rotation.z
+                );
             }
 
 
@@ -176,6 +203,16 @@ public class Agent : MonoBehaviour
             ScreenshotHandler.TakeScreenshot_Static(_width, _height, String.Format("{0}_{1}_{2}.png", _point.p_name, _photos_num, _artefact.a_name));
             _artefact.RemoveArtefact();
 
+            dataset.Rows.Add(
+                    String.Format("{0}_{1}_{2}.png", _point.p_name, _photos_num, _artefact.a_name),
+                    _point.transform.position.x,
+                    _point.transform.position.y,
+                    _point.transform.position.z,
+                    _point.transform.rotation.x,
+                    _point.transform.rotation.y,
+                    _point.transform.rotation.z
+                );
+
             fixObstacle();
         }
 
@@ -190,9 +227,11 @@ public class Agent : MonoBehaviour
         }
 
         if (_point_flag && _artefact_flag)
+        {
+            Extensions.ToCSVFile(dataset, Application.dataPath + "/Dataset/" + dataset.TableName + ".csv");
             UnityEditor.EditorApplication.isPlaying = false;
+        }
     }
-
     private void removeObstacle(Transform target)
     {
         fixObstacle();
@@ -210,7 +249,6 @@ public class Agent : MonoBehaviour
 
 
     }
-
     private void fixObstacle()
     {
         if (_obstacle)
